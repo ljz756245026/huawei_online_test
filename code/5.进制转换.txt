@@ -1,0 +1,41 @@
+题目描述
+写出一个程序，接受一个十六进制的数，输出该数值的十进制表示。（多组同时输入?）
+输入描述:
+
+输入一个十六进制的数值字符串。
+输出描述:
+
+输出该数值的十进制字符串。
+示例1
+输入
+复制
+0xA
+输出
+复制
+10
+
+来自 <https://www.nowcoder.com/practice/8f3df50d2b9043208c5eed283d1d4da6?tpId=37&tqId=21228&tPage=1&rp=&ru=/ta/huawei&qru=/ta/huawei/question-ranking> 
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    string str;
+    while(getline(cin, str))
+    {
+        if(str.size() < 0) break;
+        //超出int范围  long long
+        long long num = 0;
+        for(int i = 2; i < str.size(); i ++)
+        {
+            if(str[i] >= '0' && str[i] <= '9')
+                num = num *16 + str[i] - '0';
+            else
+                num = num * 16 + str[i] - 'A' + 10;
+        }
+        cout << num << endl;
+    }
+    
+    return 0;
+}

@@ -1,0 +1,38 @@
+题目描述
+编写一个函数，计算字符串中含有的不同字符的个数。字符在ACSII码范围内(0~127)，换行表示结束符，不算在字符里。不在范围内的不作统计。
+输入描述:
+
+输入N个字符，字符在ACSII码范围内。
+输出描述:
+
+输出范围在(0~127)字符的个数。
+示例1
+输入
+复制
+abc
+输出
+复制
+3
+
+来自 <https://www.nowcoder.com/practice/eb94f6a5b2ba49c6ac72d40b5ce95f50?tpId=37&tqId=21233&tPage=1&rp=&ru=%2Fta%2Fhuawei&qru=%2Fta%2Fhuawei%2Fquestion-ranking> 
+#include <iostream>
+#include <unordered_map>
+
+using namespace std;
+
+int main()
+{
+    int sum = 0;
+    unordered_map<char, int> hash;//hash[a] = 0;
+    char c;
+    while(cin >> c) hash[c] = 1;
+    for(int i = 0; i < hash.size(); i ++)
+    {
+        //ascii 0  ' '
+        if(hash[' ' + i] == 1)
+            sum ++;
+    }
+    cout << sum << endl;
+    
+    return 0;
+}

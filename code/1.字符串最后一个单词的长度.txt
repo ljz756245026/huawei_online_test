@@ -1,0 +1,39 @@
+题目描述
+计算字符串最后一个单词的长度，单词以空格隔开。?
+输入描述:
+
+一行字符串，非空，长度小于5000。
+输出描述:
+
+整数N，最后一个单词的长度。
+示例1
+输入
+复制
+hello world
+输出
+复制
+5
+
+来自 <https://www.nowcoder.com/practice/8c949ea5f36f422594b306a2300315da?tpId=37&tqId=21224&tPage=1&rp=&ru=/ta/huawei&qru=/ta/huawei/question-ranking> 
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+int main()
+{
+    char str[5001];
+    //输入字符串
+    //cin >> str;//错的 遇到空格不读了
+    //cin不接受空格，TAB等键的输入，遇到这些键，字符串会终止，而gets()则接受连续的输入，包括空格，TAB
+    gets(str);
+    //计算、输出最后一个单词长度
+    //cout << str << endl;
+    int len = 0;
+    for(int i = strlen(str) - 1; str[i] != ' '&& i >= 0; i--)
+        len ++;
+    
+    cout << len << endl;
+    
+    return 0;
+}

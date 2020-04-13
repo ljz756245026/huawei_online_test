@@ -1,0 +1,38 @@
+题目描述
+输入一个int型整数，按照从右向左的阅读顺序，返回一个不含重复数字的新的整数。
+输入描述:
+
+输入一个int型整数
+输出描述:
+
+按照从右向左的阅读顺序，返回一个不含重复数字的新的整数
+示例1
+输入
+复制
+9876673
+输出
+复制
+37689
+
+来自 <https://www.nowcoder.com/practice/253986e66d114d378ae8de2e6c4577c1?tpId=37&tqId=21232&tPage=1&rp=&ru=%2Fta%2Fhuawei&qru=%2Fta%2Fhuawei%2Fquestion-ranking> 
+#include <iostream>
+#include <unordered_map>
+using namespace std;
+
+int main()
+{
+    unordered_map<int, int> hash;
+    int num, out;
+    cin >> num;
+    while(num)
+    {
+        if(hash[num % 10] == 0)
+        {
+            hash[num % 10] ++;
+            out = out * 10 + num % 10;
+        }
+        num /= 10;
+    }
+    cout << out << endl;
+    return 0;
+}

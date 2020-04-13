@@ -1,0 +1,51 @@
+输入描述:
+
+先输入键值对的个数
+然后输入成对的index和value值，以空格隔开
+输出描述:
+
+输出合并后的键值对（多行）
+示例1
+输入
+复制
+40 10 21 23 4
+输出
+复制
+0 31 23 4
+
+来自 <https://www.nowcoder.com/practice/de044e89123f4a7482bd2b214a685201?tpId=37&tqId=21231&tPage=1&rp=&ru=%2Fta%2Fhuawei&qru=%2Fta%2Fhuawei%2Fquestion-ranking> 
+#include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin >> n;
+    unordered_map<int, int> hash;
+    vector<int> key;
+    while(n --)
+    {
+        int k, v;
+        cin >> k >> v;
+        key.push_back(k);//有重复的
+        hash[k] += v;
+    }
+
+    
+    //key去重
+    sort(key.begin(), key.end());
+    key.erase(unique(key.begin(), key.end()), key.end());//key中就不重复
+    for(auto x : key) cout << x << " " << hash[x] << endl;
+    //1  -9
+    //1  9
+    //1  0
+    /*
+    for(int i = 0; i < hash.size();i ++)
+        if(hash[i] != 0)
+            cout << i << ' '<< hash[i] << endl;
+    */
+    return 0;
+}

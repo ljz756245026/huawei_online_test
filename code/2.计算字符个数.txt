@@ -1,0 +1,42 @@
+题目描述
+写出一个程序，接受一个由字母和数字组成的字符串，和一个字符，然后输出输入字符串中含有该字符的个数。不区分大小写。
+输入描述:
+
+第一行输入一个有字母和数字以及空格组成的字符串，第二行输入一个字符。
+输出描述:
+
+输出输入字符串中含有该字符的个数。
+示例1
+输入
+复制
+ABCDEFA
+输出
+复制
+1
+
+来自 <https://www.nowcoder.com/practice/a35ce98431874e3a820dbe4b2d0508b1?tpId=37&tqId=21225&tPage=1&rp=&ru=%2Fta%2Fhuawei&qru=%2Fta%2Fhuawei%2Fquestion-ranking> 
+#include <iostream>
+
+using namespace std;
+
+const int N = 100010;
+char str[N];
+
+int main()
+{
+    //输入字符串
+    //cin >> str;
+    gets(str);
+    
+    char x;
+    cin >> x;
+    
+    int count = 0;
+    for(int i = 0; str[i] != '\0'; i ++)
+    {
+        if(str[i] == x || str[i] == x + 32 || str[i] == x - 32)//大小写
+            count ++;
+    }
+    cout << count << endl;
+    return 0;
+}
