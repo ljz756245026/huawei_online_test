@@ -1,0 +1,38 @@
+题目描述
+输入一个int型的正整数，计算出该int型数据在内存中存储时1的个数。
+输入描述:
+
+?输入一个整数（int类型）
+输出描述:
+
+?这个数转换成2进制后，输出1的个数
+示例1
+输入
+复制
+5
+输出
+复制
+2
+
+来自 <https://www.nowcoder.com/practice/440f16e490a0404786865e99c6ad91c9?tpId=37&tqId=21238&tPage=1&rp=&ru=%2Fta%2Fhuawei&qru=%2Fta%2Fhuawei%2Fquestion-ranking> 
+//5
+//101
+//2
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int num;
+    cin >> num;
+    int count = 0;
+    while(num)
+    {
+        if(num & 1)
+            count ++;
+        num = num >> 1;
+    }
+    cout << count << endl;
+    return 0;
+}

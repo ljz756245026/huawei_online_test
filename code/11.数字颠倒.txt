@@ -1,0 +1,40 @@
+题目描述
+描述：
+输入一个整数，将这个整数以字符串的形式逆序输出
+程序不考虑负数的情况，若数字含有0，则逆序形式也含有0，如输入为100，则输出为001
+
+输入描述:
+
+输入一个int整数
+输出描述:
+
+将这个整数以字符串的形式逆序输出
+示例1
+输入
+复制
+1516000
+输出
+复制
+0006151
+
+来自 <https://www.nowcoder.com/practice/ae809795fca34687a48b172186e3dafe?tpId=37&tqId=21234&tPage=1&rp=&ru=/ta/huawei&qru=/ta/huawei/question-ranking> 
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    string str;
+    int num;
+    cin >> num;
+    while(num != 0)
+    {
+        char c = num % 10 + '0';
+        num /= 10;
+        str += c;
+    }
+    
+    cout << str << endl;
+    
+    return 0;
+}

@@ -1,0 +1,42 @@
+题目描述
+给定n个字符串，请对n个字符串按照字典序排列。
+输入描述:
+输入第一行为一个正整数n(1≤n≤1000),下面n行为n个字符串(字符串长度≤100),字符串中只含有大小写字母。
+输出描述:
+数据输出n行，输出结果为按照字典序排列的字符串。
+示例1
+输入
+复制
+9captocatcardtwotooupboatboot
+输出
+复制
+boatbootcapcardcattotootwoup
+
+来自 <https://www.nowcoder.com/practice/5af18ba2eb45443aa91a11e848aa6723?tpId=37&tqId=21237&tPage=1&rp=&ru=%2Fta%2Fhuawei&qru=%2Fta%2Fhuawei%2Fquestion-ranking> 
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+bool cmp(const string &s1, const string &s2)
+{
+    return s1 < s2;
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    vector<string> res;
+    while(n --)
+    {
+        string word;
+        cin >> word;
+        res.push_back(word);
+    }
+    
+    sort(res.begin(),res.end(),cmp);
+    for(auto x : res) cout << x << endl;
+    return 0;
+}
+

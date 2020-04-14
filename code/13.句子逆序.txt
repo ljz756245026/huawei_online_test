@@ -1,0 +1,55 @@
+题目描述
+将一个英文语句以单词为单位逆序排放。例如“I?am?a?boy”，逆序排放后为“boy?a?am?I”
+所有单词之间用一个空格隔开，语句中除了英文字母外，不再包含其他字符
+
+接口说明
+/**
+?*?反转句子
+?*?
+?*?@param?sentence?原句子
+?*?@return?反转后的句子
+?*/
+public?String?reverse(String?sentence);
+?
+?
+?
+输入描述:
+
+将一个英文语句以单词为单位逆序排放。
+输出描述:
+
+得到逆序的句子
+示例1
+输入
+复制
+I am a boy
+输出
+复制
+boy a am I
+
+来自 <https://www.nowcoder.com/practice/48b3cb4e3c694d9da5526e6255bb73c3?tpId=37&tqId=21236&tPage=1&rp=&ru=%2Fta%2Fhuawei&qru=%2Fta%2Fhuawei%2Fquestion-ranking> 
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+    string str;
+    getline(cin, str);
+    //翻转句子所有字符
+    reverse(str.begin(), str.end());
+    //翻转单个单词
+    for(int i = 0; i < str.size(); i ++)
+    {
+        int j = i;
+        //通过i j定位单词首尾
+        while(j < str.size() && str[j] != ' ') j ++;
+        reverse(str.begin() + i, str.begin() + j);
+        i = j;
+    }
+    
+    cout << str << endl;
+    
+    return 0;
+}
