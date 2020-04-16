@@ -1,0 +1,192 @@
+题目描述
+请解析IP地址和对应的掩码，进行分类识别。要求按照A/B/C/D/E类地址归类，不合法的地址和掩码单独归类。
+所有的IP地址划分为?A,B,C,D,E五类
+A类地址1.0.0.0~126.255.255.255;
+B类地址128.0.0.0~191.255.255.255;
+C类地址192.0.0.0~223.255.255.255;
+D类地址224.0.0.0~239.255.255.255；
+E类地址240.0.0.0~255.255.255.255
+
+私网IP范围是：
+10.0.0.0～10.255.255.255
+172.16.0.0～172.31.255.255
+192.168.0.0～192.168.255.255
+子网掩码为二进制下前面是连续的1，然后全是0。（例如：255.255.255.32就是一个非法的掩码）
+注意二进制下全是1或者全是0均为非法
+注意：
+1. 类似于【0.*.*.*】的IP地址不属于上述输入的任意一类，也不属于不合法ip地址，计数时可以忽略
+2. 私有IP地址和A,B,C,D,E类地址是不冲突的
+
+输入描述:
+
+多行字符串。每行一个IP地址和掩码，用~隔开。
+输出描述:
+
+统计A、B、C、D、E、错误IP地址或错误掩码、私有IP的个数，之间以空格隔开。
+示例1
+输入
+复制
+10.70.44.68~255.254.255.01.0.0.1~255.0.0.0192.168.0.2~255.255.255.019..0.~255.255.255.0
+输出
+复制
+1 0 1 0 0 2 1
+
+来自 <https://www.nowcoder.com/practice/de538edd6f7e4bc3a5689723a7435682?tpId=37&tqId=21241&tPage=1&rp=&ru=%2Fta%2Fhuawei&qru=%2Fta%2Fhuawei%2Fquestion-ranking> 
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int strtoint(string str)
+{
+    //68
+    int sum = 0;
+    for(int i = 0; i < str.size(); i ++)
+        sum = sum * 10 + str[i] - '0';
+    return sum;
+}
+
+vector<int> toint(string str)
+{
+    vector<int> res;
+    //10.70.44.68
+    int len = 0;
+    for(int i = 0; i < str.size(); i ++)
+    {
+        while(str[i] != '.' && i < str.size())
+            i ++, len ++;
+        string nums = str.substr(i - len, len);
+        int num = strtoint(nums);
+        res.push_back(num);
+        len = 0;
+    }
+    return res;
+}
+
+bool ismask(vector<int> mask)
+{
+    //255 254 255 0
+    //长度 == 4
+    //1在前
+    if(mask.size() != 4)
+        return false;
+    
+    if(mask[0] == 255)
+    {
+        if(mask[1] == 255)
+        {
+            if(mask[2] == 255)
+            {
+                //8位2进制
+                //7个1  6个1 .。。 1个1  + 000
+                if(mask[3] == 254 || mask[3] == 252 || mask[3] == 248 || mask[3] == 240 || mask[3] == 224 || mask[3] == 192 || mask[3] == 128 || mask[3] == 0)
+                    return true;
+                else
+                    return false;
+            }
+            else{
+                if(mask[2] == 254 || mask[2] == 252 || mask[2] == 248 || mask[2] == 240 || mask[2] == 224 || mask[2] == 192 || mask[2] == 128 || mask[2] == 0)
+                    if(mask[3] == 0)
+                        return true;
+                    else
+                        return false;
+            }
+        }
+        else{
+            if(mask[1] == 254 || mask[1] == 252 || mask[1] == 248 || mask[1] == 240 || mask[1] == 224 || mask[1] == 192 || mask[1] == 128 || mask[1] == 0)
+                if(mask[3] == 0 && mask[2] == 0)
+                    return true;
+                else
+                    return false;
+            
+        }
+    }
+    else{
+        if(mask[0] == 254 || mask[0] == 252 || mask[0] == 248 || mask[0] == 240 || mask[0] == 224 || mask[0] == 192 || mask[0] == 128)
+            if(mask[1] == 0 && mask[2] == 2 && mask[3] == 0)
+                return true;
+            else
+                return false;
+    }
+    return false;
+}
+
+int main()
+{
+    vector<int> res(7,0);
+    string str;
+    while(cin >> str)
+    {
+        //10.70.44.68~255.254.255.0
+        //分割ip mask
+        string ips, masks;
+        vector<string> temp;
+        int len = 0;
+        for(int i = 0; i < str.size(); i ++)
+        {
+            while(str[i] != '~' && i < str.size())
+                i ++, len ++;
+            string s = str.substr(i - len, len);
+            temp.push_back(s);
+            len = 0;
+        }
+        ips = temp[0];
+        masks = temp[1];
+        //cout << ips << ' ' << masks << endl;//分割成功
+        
+        //字符串 二进制 比较大小 转换成int
+        vector<int> ip, mask;
+        ip = toint(ips);
+        mask = toint(masks);
+        
+        //子网掩码 11111 0000
+        if(ismask(mask))
+        {
+            //判断ip
+            
+            //A类地址1.0.0.0~126.255.255.255;
+            //B类地址128.0.0.0~191.255.255.255;
+            //C类地址192.0.0.0~223.255.255.255;
+            //D类地址224.0.0.0~239.255.255.255；
+            //E类地址240.0.0.0~255.255.255.255
+            //私网IP范围是
+            //10.0.0.0～10.255.255.255
+            //172.16.0.0～172.31.255.255
+            //192.168.0.0～192.168.255.255
+            if(ip[1] >= 0 && ip[1] <= 255 && ip[2] >= 0 && ip[2] <= 255 && ip[3] >= 0 && ip[3]<+ 255)
+            {
+                if(ip[0] >= 1 && ip[0] <=126)//A
+                {
+                    res[0] ++;
+                    if(ip[0] == 10)//私有
+                        res[6]++;
+                }
+                else if(ip[0] >= 128 && ip[0] <= 191)//b
+                {
+                    res[1] ++;
+                    if(ip[0] == 172 && ip[1] >= 16 && ip[1] <= 31)//私有
+                        res[6]++;
+                }
+                else if(ip[0] >= 192 && ip[0] <= 223)//c
+                {
+                    res[2] ++;
+                    if(ip[0] == 192 && ip[1] == 168)//私有
+                        res[6]++;
+                }
+                else if(ip[0] >= 224 && ip[0] <= 239)//d
+                    res[3] ++;
+                else if(ip[0] >= 240 && ip[0] <= 255)//e
+                    res[4] ++;
+            }
+        }
+        else
+            res[5] ++;
+    }
+    
+    //A~E  0~4
+    //错误 5
+    //私有 6
+    cout << res[0] << ' ' << res[1] << ' ' << res[2] << ' ' << res[3] << ' ' << res[4] << ' ' << res[5] << ' '<< res[6] << endl;
+    return 0;
+}
