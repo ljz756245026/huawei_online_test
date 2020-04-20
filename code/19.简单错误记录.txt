@@ -1,0 +1,91 @@
+题目描述
+开发一个简单错误记录功能小模块，能够记录出错的代码所在的文件名称和行号。
+
+处理：
+
+1、?记录最多8条错误记录，循环记录（或者说最后只输出最后出现的八条错误记录），对相同的错误记录（净文件名称和行号完全匹配）只记录一条，错误计数增加；
+
+2、?超过16个字符的文件名称，只记录文件的最后有效16个字符；
+
+3、?输入的文件可能带路径，记录文件名称不能带路径。
+
+输入描述:
+
+一行或多行字符串。每行包括带路径文件名称，行号，以空格隔开。
+输出描述:
+
+将所有的记录统计并将结果输出，格式：文件名?代码行数?数目，一个空格隔开，如：
+示例1
+输入
+复制
+E:\V1R2\product\fpgadrive.c   1325
+输出
+复制
+fpgadrive.c 1325 1
+
+来自 <https://www.nowcoder.com/practice/2baa6aba39214d6ea91a2e03dff3fbeb?tpId=37&tqId=21242&tPage=1&rp=&ru=/ta/huawei&qru=/ta/huawei/question-ranking> 
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+//文件名 行数 次数
+struct record
+{
+    char s[100];
+    int col;
+    int count;
+};
+
+int main()
+{
+    char filename[100];
+    int col;
+    int cnt = 0;//总记录条数  <=8
+    
+    record rec[1000];
+    while(cin >> filename >> col)
+    {
+        //分割 /路径
+        //E:\V1R2\product\fpgadrive.c   1325
+        //fpgadrive.c
+        char *p = strrchr(filename, '\\');
+        p ++;
+        if(strlen(p) > 16)//截取后16位
+            p = p + (strlen(p) - 16);
+        
+        int flag = 0;
+        
+        //查重 flag 0 1
+        for(int i  = 0; i < cnt; i ++)
+        {
+            //strcmp(s1, s2) 0
+            if(strcmp(rec[i].s, p) == 0 && rec[i].col == col)//名称+行号
+            {
+                //count ++;
+                rec[i].count ++;
+                flag = 1;
+                break;
+            }
+        }
+        
+        if(!flag)//没有当前错误记录 全部插进去
+        {
+            strcpy(rec[cnt].s, p);
+            rec[cnt].col = col;
+            rec[cnt].count = 1;
+            cnt ++;
+        }
+    }
+    
+    //输出8条
+    int i = 0;
+    if(cnt > 8)
+        i = cnt - 8;
+    else
+        i = 0;
+    //fpgadrive.c 1325 1
+    for(; i < cnt; i ++)
+        cout << rec[i].s << " " << rec[i].col << " "<< rec[i].count << endl;
+    
+    return 0;
+}
