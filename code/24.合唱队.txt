@@ -1,0 +1,73 @@
+题目描述
+计算最少出列多少位同学，使得剩下的同学排成合唱队形
+说明：
+N位同学站成一排，音乐老师要请其中的(N-K)位同学出列，使得剩下的K位同学排成合唱队形。
+合唱队形是指这样的一种队形：设K位同学从左到右依次编号为1，2…，K，他们的身高分别为T1，T2，…，TK，???则他们的身高满足存在i（1<=i<=K）使得T1<T2<......<Ti-1<Ti>Ti+1>......>TK。
+你的任务是，已知所有N位同学的身高，计算最少需要几位同学出列，可以使得剩下的同学排成合唱队形。
+请注意处理多组输入输出！
+
+输入描述:
+
+整数N
+输出描述:
+
+最少需要几位同学出列
+示例1
+输入
+复制
+8186 186 150 200 160 130 197 200
+输出
+复制
+4
+
+来自 <https://www.nowcoder.com/practice/6d9d69e3898f45169a441632b325c7b4?tpId=37&tqId=21247&tPage=2&rp=&ru=%2Fta%2Fhuawei&qru=%2Fta%2Fhuawei%2Fquestion-ranking> 
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void calcu(vector<int> height, vector<int> &innum)
+{
+    //计算以height[i]为最高的递增队列人数
+    for(int i = 1; i < height.size(); i ++)
+        for(int j = i - 1; j >= 0; j --)
+            if(height[j] < height[i] && innum[i] < innum[j] + 1)
+                innum[i] = innum[j] + 1;
+}
+
+
+int main()
+{
+    int n;
+    
+    while(cin >> n)
+    {
+        vector<int> height;
+        vector<int> incnum(n, 1);
+        vector<int> decnum(n, 1);
+        vector<int> realnum;
+        int h;
+        for(int i = 0; i < n; i ++)
+            //cin >> height[i];
+            cin >> h,height.push_back(h);
+        
+        //求递增序列数组人数
+        calcu(height, incnum);
+        //求递减序列数组人数
+        reverse(height.begin(), height.end());
+        calcu(height, decnum);
+        reverse(decnum.begin(), decnum.end());
+        
+        //求最长的队列
+        int maxnum = 0;
+        for(int i = 0; i < n; i ++)
+        {
+            realnum.push_back(incnum[i] + decnum[i] - 1);//减掉自身的
+            maxnum = max(maxnum, realnum[i]);
+        }
+        cout << n - maxnum <<endl;
+    }
+    
+    return 0;
+}
