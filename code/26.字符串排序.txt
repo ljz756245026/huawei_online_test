@@ -1,0 +1,57 @@
+题目描述
+编写一个程序，将输入字符串中的字符按如下规则排序。
+
+规则 1 ：英文字母从 A 到 Z 排列，不区分大小写。
+
+如，输入： Type 输出： epTy
+
+规则 2 ：同一个英文字母的大小写同时存在时，按照输入顺序排列。
+
+如，输入： BabA 输出： aABb
+
+规则 3 ：非英文字母的其它字符保持原来的位置。
+
+如，输入： By?e 输出： Be?y
+
+注意有多组测试数据，即输入有多行，每一行单独处理（换行符隔开的表示不同行）
+
+输入描述:
+输入字符串
+输出描述:
+输出字符串
+示例1
+输入
+复制
+A Famous Saying: Much Ado About Nothing (2012/8).
+输出
+复制
+A aaAAbc dFgghh: iimM nNn oooos Sttuuuy (2012/8).
+
+来自 <https://www.nowcoder.com/practice/5190a1db6f4f4ddb92fd9c365c944584?tpId=37&tqId=21249&tPage=2&rp=&ru=/ta/huawei&qru=/ta/huawei/question-ranking> 
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+    string str;//输入
+    vector<char> alp;//字母顺序存储
+    while(getline(cin, str))
+    {
+        alp.clear();
+        for(int i = 0; i < 26; i ++)
+            for(int j = 0; j < str.size(); j ++)
+                if(str[j] -'a' == i || str[j] - 'A' == i)//abc
+                    alp.push_back(str[j]);
+        
+        //输出
+        for(int m = 0, n = 0; m < str.size() && n < alp.size(); m ++)
+            if(str[m] >= 'a' && str[m] <= 'z' || str[m] >= 'A' && str[m] <= 'Z')
+                str[m] = alp[n], n++;
+        
+        cout << str << endl;
+    }
+    
+    return 0;
+}

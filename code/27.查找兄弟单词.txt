@@ -1,0 +1,84 @@
+题目描述
+
+?
+
+?
+
+输入描述:
+
+先输入字典中单词的个数，再输入n个单词作为字典单词。
+输入一个单词，查找其在字典中兄弟单词的个数
+再输入数字n
+输出描述:
+
+根据输入，输出查找到的兄弟单词的个数
+示例1
+输入
+复制
+3 abc bca cab abc 1
+输出
+复制
+2bca
+
+来自 <https://www.nowcoder.com/practice/03ba8aeeef73400ca7a37a5f3370fe68?tpId=37&tqId=21250&tPage=2&rp=&ru=%2Fta%2Fhuawei&qru=%2Fta%2Fhuawei%2Fquestion-ranking> 
+#include <iostream>
+#include <string.h>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+    int n;//字典中单词个数
+    
+    while(cin >> n)
+    {
+        vector<string> dic;//字典
+        string word;
+        //字典初始化
+        for(int i = 0; i < n; i ++)
+        {
+            cin >> word;
+            dic.push_back(word);
+        }
+        
+        string target;//目标单词
+        cin >> target;
+        
+        //处理 搜索兄弟单词
+        vector<string> res;//记录所有兄弟单词
+        
+        string temp = target;
+        sort(temp.begin(), temp.end());//排序
+        int lent = target.size();//目标单词的长度
+            
+        for(int i = 0; i < n; i ++)
+        {
+            int lendic = dic[i].size();
+            
+            //长度一直 单词不同
+            if((lendic == lent) && target != dic[i])
+            {
+                string tempdic = dic[i];
+                sort(tempdic.begin(), tempdic.end());
+                if(temp == tempdic)
+                    res.push_back(dic[i]);
+            }
+            
+        }
+        
+        
+        //所有兄弟单词都在res中
+        int index;//res[index - 1]
+        cin >> index;
+        //坑 一定要字典排序
+        sort(res.begin(), res.end());
+        cout << res.size() << endl;
+        //默认了index - 1  < res.size()
+        if(index - 1 < res.size())
+            cout << res[index - 1] << endl;
+    }
+    
+    return 0;
+}

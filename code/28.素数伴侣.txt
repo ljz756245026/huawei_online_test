@@ -1,0 +1,118 @@
+题目描述
+题目描述
+若两个正整数的和为素数，则这两个正整数称之为“素数伴侣”，如2和5、6和13，它们能应用于通信加密。现在密码学会请你设计一个程序，从已有的N（N为偶数）个正整数中挑选出若干对组成“素数伴侣”，挑选方案多种多样，例如有4个正整数：2，5，6，13，如果将5和6分为一组中只能得到一组“素数伴侣”，而将2和5、6和13编组将得到两组“素数伴侣”，能组成“素数伴侣”最多的方案称为“最佳方案”，当然密码学会希望你寻找出“最佳方案”。
+输入:
+有一个正偶数N（N≤100），表示待挑选的自然数的个数。后面给出具体的数字，范围为[2,30000]。
+输出:
+输出一个整数K，表示你求得的“最佳方案”组成“素数伴侣”的对数。
+?
+输入描述:
+
+输入说明
+1?输入一个正偶数n
+2?输入n个整数
+输出描述:
+
+求得的“最佳方案”组成“素数伴侣”的对数。
+示例1
+输入
+复制
+42 5 6 13
+输出
+复制
+2
+
+来自 <https://www.nowcoder.com/practice/b9eae162e02f4f928eac37d7699b352e?tpId=37&tqId=21251&tPage=2&rp=&ru=%2Fta%2Fhuawei&qru=%2Fta%2Fhuawei%2Fquestion-ranking> 
+#include <iostream>
+#include <vector>
+#include <math.h>
+
+//匈牙利算法
+
+using namespace std;
+int t[100][100] = {0};
+vector<int> ji(100, -1);
+vector<int> ou(100, -1);
+vector<int> visit(100, 0);
+
+
+bool isprime(int n)
+{
+    int flag = 0;
+    for(int i = 2; i <= n / i; i ++)
+        if(n % i == 0)
+        {
+            flag = 1;
+            break;
+        }
+    if(flag == 0) return true;
+    return false;
+}
+
+int dfs(int i)
+{
+    //找到 返回1  没找到返回0
+    for(int j = 0; j < 100; j ++)
+    {
+        if(t[i][j] == 1 && !visit[j])
+        {
+            visit[j] = 1;// ij匹配
+            if(ou[j] == -1 || dfs(ou[j]))
+            {
+                ji[i] = j;
+                ou[j] = i;
+                return 1;
+            }
+        }
+    }
+    
+    return 0;
+}
+
+int main()
+{
+    int n;
+    //素数  偶数+奇数
+    //素数伴侣  一定是 偶数 + 奇数
+    vector<int> cou, cji;
+    
+    while(cin >> n)
+    {
+        for(int i = 0; i < n; i ++)
+        {
+            int temp;
+            cin >> temp;
+            if(temp % 2 != 0) cji.push_back(temp);//奇数
+            else cou.push_back(temp);//偶数
+        }
+        
+        for(int i = 0; i < cji.size(); i ++)
+            for(int j = 0; j < cou.size(); j ++)
+                if(isprime(cji[i] + cou[j])) t[i][j] = 1;
+        
+        //匈牙利算法
+        int res = 0;
+        for(int i = 0; i < cji.size(); i ++)
+        {
+            if(ji[i] == -1)
+            {
+                for(int j = 0; j < visit.size(); j ++) visit[j] = 0;
+                res += dfs(i);//增光路径 每多找到一组 +1
+            }
+        }
+        
+        cout << res << endl;
+        //清空
+        cji.clear();
+        cou.clear();
+        
+        for(int i = 0; i < 100; i ++)
+            for(int j = 0; j < 100; j ++)
+                t[i][j] = 0;
+        
+        for(int i = 0; i < 100; i ++)
+            ji[i] = ou[i] = -1;
+    }
+    
+    return 0;
+}
