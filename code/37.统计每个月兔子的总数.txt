@@ -1,0 +1,59 @@
+题目描述
+有一只兔子，从出生后第3个月起每个月都生一只兔子，小兔子长到第三个月后每个月又生一只兔子，假如兔子都不死，问每个月的兔子总数为多少？
+?
+????/**
+?????*?统计出兔子总数。
+?????*?
+?????*?@param?monthCount?第几个月
+?????*?@return?兔子总数
+?????*/
+????public?static?int?getTotalCount(int?monthCount)
+????{
+????????return?0;
+????}
+?
+?
+输入描述:
+
+输入int型表示month
+输出描述:
+
+输出兔子总数int型
+示例1
+输入
+复制
+9
+输出
+复制
+34
+
+来自 <https://www.nowcoder.com/practice/1221ec77125d4370833fd3ad5ba72395?tpId=37&tqId=21260&tPage=2&rp=&ru=%2Fta%2Fhuawei&qru=%2Fta%2Fhuawei%2Fquestion-ranking> 
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int month;
+    while(cin >> month)
+    {
+        int first = 1, second = 0, third = 0;
+        //first 年龄1个月的兔子数量
+        //second 年龄2个月的兔子数量
+        //third 年龄3个月的兔子数量
+        //n --  先判断n 0  不为0 再减1  n-1 ~ 0
+        //-- n  n先减去1 再判断 n 0 不为0 执行循环  n-1 ~ 1
+        month --;//因为第一个月已经存在
+        while(month --)
+        {
+            third += second;
+            second = first;
+            first = third;
+        }
+        
+        cout << first + second + third << endl;
+        
+    }
+    
+    return 0;
+}
