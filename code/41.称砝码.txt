@@ -1,0 +1,70 @@
+题目描述
+现有一组砝码，重量互不相等，分别为m1,m2,m3…mn；
+每种砝码对应的数量为x1,x2,x3...xn。现在要用这些砝码去称物体的重量(放在同一侧)，问能称出多少种不同的重量。
+注：
+称重重量包括0
+
+方法原型：public?static?int?fama(int?n,?int[]?weight,?int[]?nums)
+
+输入描述:
+输入包含多组测试数据。
+对于每组测试数据：
+第一行：n --- 砝码数(范围[1,10])
+第二行：m1 m2 m3 ... mn --- 每个砝码的重量(范围[1,2000])
+第三行：x1 x2 x3 .... xn --- 每个砝码的数量(范围[1,6])
+输出描述:
+
+利用给定的砝码可以称出的不同的重量数
+示例1
+输入
+复制
+21 22 1
+输出
+复制
+5
+
+来自 <https://www.nowcoder.com/practice/f9a4c19050fc477e9e27eb75f3bfd49c?tpId=37&tqId=21264&tPage=3&rp=&ru=/ta/huawei&qru=/ta/huawei/question-ranking> 
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int n;//砝码数 1~10
+    while(cin >> n)
+    {
+        int w[10] = {0};//重量 1~2000
+        int num[10] = {0};//数量 1~6
+        //每个砝码重量
+        for(int i = 0; i < n; i ++)
+            cin >> w[i];
+        //相应的数量
+        for(int i = 0; i < n; i ++)
+            cin >> num[i];
+        
+        int v[120000] = {0};// 10 * 2000 *6 = 120000
+        int maxw = 0;
+        for(int i = 0; i < n; i ++)
+            maxw += w[i] * num[i];
+        
+        v[0] = 1;
+        //类似背包问题
+        for(int i = 0; i < n; i ++)
+            for(int j = maxw; j >= 0; j--)
+                for(int k = 1; k <= num[i]; k ++)
+                {
+                    if(v[j] == 1)
+                        v[j + k * w[i]] = 1;
+                }
+        
+        int res = 1;
+        for(int i = 1; i <= maxw; i ++)
+            if(v[i] == 1)
+                res ++;
+        
+        cout << res << endl;
+        
+    }
+    
+    return 0;
+}

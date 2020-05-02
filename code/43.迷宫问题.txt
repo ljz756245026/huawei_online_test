@@ -1,0 +1,118 @@
+题目描述
+定义一个二维数组N*M（其中2<=N<=10;2<=M<=10），如5?×?5数组下所示：?
+
+int?maze[5][5]?=?{
+
+????????0,?1,?0,?0,?0,
+
+????????0,?1,?0,?1,?0,
+
+????????0,?0,?0,?0,?0,
+
+????????0,?1,?1,?1,?0,
+
+????????0,?0,?0,?1,?0,
+
+};
+
+它表示一个迷宫，其中的1表示墙壁，0表示可以走的路，只能横着走或竖着走，不能斜着走，要求编程序找出从左上角到右下角的最短路线。入口点为[0,0],既第一空格是可以走的路。
+Input
+一个N?×?M的二维数组，表示一个迷宫。数据保证有唯一解,不考虑有多解的情况，即迷宫只有一条通道。
+Output
+左上角到右下角的最短路径，格式如样例所示。
+Sample?Input
+0?1?0?0?0
+0?1?0?1?0
+0?0?0?0?0
+0?1?1?1?0
+0?0?0?1?0
+Sample?Output
+(0,?0)
+(1,?0)
+(2,?0)
+(2,?1)
+(2,?2)
+(2,?3)
+(2,?4)
+(3,?4)
+(4,?4)
+?
+?
+?
+输入描述:
+
+输入两个整数，分别表示二位数组的行数，列数。再输入相应的数组，其中的1表示墙壁，0表示可以走的路。数据保证有唯一解,不考虑有多解的情况，即迷宫只有一条通道。
+输出描述:
+
+左上角到右下角的最短路径，格式如样例所示。
+示例1
+输入
+复制
+5 50 1 0 0 00 1 0 1 00 0 0 0 00 1 1 1 00 0 0 1 0
+输出
+复制
+(0,0)(1,0)(2,0)(2,1)(2,2)(2,3)(2,4)(3,4)(4,4)
+
+来自 <https://www.nowcoder.com/practice/cf24906056f4488c9ddb132f317e03bc?tpId=37&tqId=21266&tPage=3&rp=&ru=%2Fta%2Fhuawei&qru=%2Fta%2Fhuawei%2Fquestion-ranking> 
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+int N, M;//行列
+vector<vector<int>> maze; //迷宫矩阵
+vector<vector<int>> path_best;//最优路径
+vector<vector<int>> path_temp;//中间路径
+
+void bestpath(int i, int j)
+{
+    //每次走过的点 标1
+    maze[i][j] = 1;
+    
+    path_temp.push_back({ i, j });//当前结点push进
+    
+    //找最优路径 需要比较 判断结束位置 N M
+    if(i == N - 1 && j == M - 1)//结束
+        if(path_temp.size() < path_best.size() || path_best.empty())//比较 temp < best 或者best空
+            path_best = path_temp;
+    
+    //走路 回溯
+    //边界优先判断
+    //上
+    if(i - 1 >= 0 && maze[i - 1][j] == 0)
+        bestpath(i - 1, j);
+    //下
+    if(i + 1 <= N - 1 && maze[i + 1][j] == 0)
+        bestpath(i + 1, j);
+    //左
+    if(j - 1>= 0 && maze[i][j - 1] == 0)
+        bestpath(i, j - 1);
+    //右
+    if( j + 1 <= M - 1 && maze[i][j + 1] == 0)
+        bestpath(i, j + 1);
+    
+    //恢复现场 回溯
+    maze[i][j] = 0;
+    path_temp.pop_back();
+}
+
+int main()
+{
+    while(cin >> N >> M)
+    {
+        maze = vector<vector<int>>(N, vector<int>(M, 0));
+        path_temp.clear();
+        path_best.clear();
+        //输入迷宫
+        for(int i = 0; i < N; i ++)
+            for(int j = 0; j < M; j ++)
+                cin >> maze[i][j];
+        
+        //回溯法找路径
+        bestpath(0, 0);
+        //输出最优的路径
+        for(auto x : path_best)
+            cout << '(' << x[0] << ',' << x[1] << ')' << endl;
+    }
+    return 0;
+}
