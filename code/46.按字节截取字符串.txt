@@ -1,0 +1,40 @@
+题目描述
+编写一个截取字符串的函数，输入为一个字符串和字节数，输出为按字节截取的字符串。但是要保证汉字不被截半个，如"我ABC"4，应该截为"我AB"，输入"我ABC汉DEF"6，应该输出为"我ABC"而不是"我ABC+汉的半个"。 
+ 
+输入描述:
+
+输入待截取的字符串及长度
+输出描述:
+
+截取后的字符串
+示例1
+输入
+复制
+我ABC汉DEF
+6
+输出
+复制
+我ABC
+
+来自 <https://www.nowcoder.com/practice/a30bbc1a0aca4c27b86dd88868de4a4a?tpId=37&&tqId=21269&rp=1&ru=/ta/huawei&qru=/ta/huawei/question-ranking> 
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main(){
+    string str;
+    int num;
+    while(cin >> str >> num){
+        //string自带截取
+        //cout << str.substr(0, num) << endl;
+        
+        //汉字 < 0
+        int temp = num - 1;
+        while(temp >= 0 && str[temp] < 0)
+            temp --;
+        if((num - temp) % 2 == 0)
+            num --;
+        cout << str.substr(0, num) << endl;
+    }
+    return 0;
+}
